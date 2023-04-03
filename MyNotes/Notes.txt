@@ -1,0 +1,56 @@
+users
+- id (primary key)
+- name
+- email
+- password
+- remember_token
+- created_at
+- updated_at
+
+conversations
+- id (primary key)
+- conversation_type (enum: private, group)
+- created_at
+- updated_at
+
+
+
+conversation_user (pivot table for private conversations)
+- conversation_id (foreign key referencing conversations.id)
+- user_id (foreign key referencing users.id)
+- created_at
+- updated_at
+
+conversation_group (pivot table for group conversations)
+- conversation_id (foreign key referencing conversations.id)
+- group_id (foreign key referencing groups.id)
+- created_at
+- updated_at
+
+groups
+- id (primary key)
+- name
+- created_at
+- updated_at
+
+group_user (pivot table for group memberships)
+- group_id (foreign key referencing groups.id)
+- user_id (foreign key referencing users.id)
+- created_at
+- updated_at
+
+messages
+- id (primary key)
+- conversation_id (foreign key referencing conversations.id)
+- sender_id (foreign key referencing users.id)
+- message
+- type (enum: text, image, emoji)
+- created_at
+- updated_at
+message_statuses
+- id (primary key)
+- message_id (foreign key referencing message.id)
+- user_id  (foreign key referencing users.id)
+- status
+- created_at
+- updated_at
