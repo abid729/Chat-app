@@ -11,13 +11,30 @@ use Illuminate\Support\Facades\DB;
 class ChatController extends Controller
 {
     public function index(){
-     $chats =  DB::table('messages')
-     ->latest()
-     ->limit(3)
-     ->get()
-     ->reverse();
-    //  $messageStatuses = $chats->message;
-    // $message = Message::find(22);
+      $chathead = DB::table('conversations as c')
+      ->leftJoin('conversation_user as cu', 'c.id', '=', 'cu.conversation_id')
+      ->leftJoin('users as u', 'u.id', '=', 'cu.user_id')
+      ->leftJoin('conversation_group as cg', 'c.id', '=', 'cg.conversation_id')
+      ->leftJoin('groups as g', 'g.id', '=', 'cg.group_id')
+      ->where('c.conversation_type', '=', 'private')
+      ->orWhere(function($query) {
+          $query->where('c.conversation_type', '=', 'group')
+                ->whereIn('g.id', function($subquery) {
+                      $subquery->select('gu.group_id')
+                               ->from('group_user as gu')
+                               ->where('gu.user_id', '=', 1);
+                });
+      })
+      ->orderBy('c.updated_at', 'DESC')
+      ->select('c.id as conversation_id', 'u.name as chat_head_name', 'g.name as group_name','u.image as chat_head_image', 'g.image as group_image')
+      ->get();
+
+    //  $chats =  DB::table('messages')
+    //  ->latest()
+    //  ->limit(3)
+    //  ->get()
+    //  ->reverse();
+    
     $messages = Message::with('messageStatuses') ->latest()
     ->limit(3)
     ->get()
@@ -26,6 +43,8 @@ class ChatController extends Controller
     // ->limit(3)
     // ->get()
     // ->reverse());
+    // dd($messages);
+    // return $messages;
 // $messageStatuses = $message->messageStatuses;
 //     //  dd($messageStatuses);
 //   foreach($chats as $statuses){
@@ -33,7 +52,7 @@ class ChatController extends Controller
 //     dd($messageStatuses);
 //   }
 
-     return view('chat', compact('chats','messages'));
+     return view('chat', compact('chats','messages','chathead'));
     }
 
     public function store(Request $request)

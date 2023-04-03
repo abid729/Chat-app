@@ -11,6 +11,7 @@ class MessageStatus extends Model
     protected $table = "message_statuses";
     public function messages()
     {
-        return $this->belongsTo(App\Employee::class);
+        // return $this->belongsTo(App\Employee::class);
+        return $this->belongsTo('App\Message');
     }
 }

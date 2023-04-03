@@ -12,11 +12,13 @@ class Message extends Model
     protected $table = "messages";
     public function messageStatuses()
     {
-        return $this->hasMany(MessageStatus::class);
+        return $this->hasOne(MessageStatus::class);
     }
-    public function statuses() :HasMany
+    public function statuses() 
     {
-        return $this->hasMany(MessageStatus::class);
+        return $this->hasOne('App\MessageStatus');
+
+        // return $this->hasMany(MessageStatus::class);
     }
     public function getMessageType($message) {
         // Check if the message is an emoji

@@ -27,21 +27,35 @@
                         </div>
                         <input type="text" class="form-control" placeholder="Search...">
                      </div>
+          
+       
                      <ul class="list-unstyled chat-list mt-2 mb-0">
-                        <li class="clearfix">
-                           <img src=" {{url('/images/my-pic.jpg')}} " alt="avatar">
-                           <div class="about">
-                              <div class="name">Muhammad Abid</div>
+                     @foreach ($chathead as $chathead)
+                        
+                     <li class="clearfix">
+                     @if ($chathead->group_image)
+                     <img src="{{url($chathead->group_image)}}" alt="avatar">
+                     @else
+                     @if ($chathead->chat_head_image)
+                     <img src="{{url($chathead->chat_head_image)}}" alt="avatar">
+                     @else
+                     @endif
+                     @endif
+
+                     
+
+                     <div class="about">
+                           @if ($chathead->group_name)
+                           <div class="name">{{ $chathead->group_name }}</div>
+                           
+                          @else
+                          <div class="name">{{ $chathead->chat_head_name }}</div>
+                         @endif
                               <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>
                            </div>
                         </li>
-                        <li class="clearfix active">
-                           <img src="{{url('/images/bhai.jpg')}}" alt="avatar">
-                           <div class="about">
-                           <div class="name">Bhai ❤️</div>
-                              <div class="status"> <i class="fa fa-circle online"></i> online </div>
-                           </div>
-                        </li>
+                        @endforeach
+                       
                     
                      </ul>
                   </div>
@@ -74,8 +88,6 @@
                                  , {{ $day = $dateTime->format('l') }}</span>
                                  <img src="{{url('/images/my-pic.jpg')}}" alt="avatar">
                               </div>
-             
-                              
 
                               <div class="message other-message float-right">{{ $chat->message }} </div>
                               @php $status = "sent";
