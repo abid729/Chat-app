@@ -10,19 +10,14 @@ class Message extends Model
 {
     use HasFactory;
     protected $table = "messages";
-    public function messageStatuses()
+   
+    public function messageStatus()
     {
         return $this->hasOne(MessageStatus::class);
     }
-    public function statuses() 
-    {
-        return $this->hasOne('App\MessageStatus');
 
-        // return $this->hasMany(MessageStatus::class);
-    }
     public function getMessageType($message) {
         // Check if the message is an emoji
-    
         if (preg_match('/[\x{1F600}-\x{1F64F}]/u', $message)) {
             return 'emoji';
         }

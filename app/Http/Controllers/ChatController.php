@@ -29,30 +29,14 @@ class ChatController extends Controller
       ->select('c.id as conversation_id', 'u.name as chat_head_name', 'g.name as group_name','u.image as chat_head_image', 'g.image as group_image')
       ->get();
 
-    //  $chats =  DB::table('messages')
-    //  ->latest()
-    //  ->limit(3)
-    //  ->get()
-    //  ->reverse();
-    
-    $messages = Message::with('messageStatuses') ->latest()
-    ->limit(3)
+    // dd($chathead);
+    $chats =  Message::with('messageStatus')
+    ->latest()
+    ->limit(2)
     ->get()
     ->reverse();
-    // dd($messages = Message::with('messageStatuses') ->latest()
-    // ->limit(3)
-    // ->get()
-    // ->reverse());
-    // dd($messages);
-    // return $messages;
-// $messageStatuses = $message->messageStatuses;
-//     //  dd($messageStatuses);
-//   foreach($chats as $statuses){
-//     $statuses = $chats->messageStatuses;
-//     dd($messageStatuses);
-//   }
-
-     return view('chat', compact('chats','messages','chathead'));
+    
+     return view('chat', compact('chats','chathead'));
     }
 
     public function store(Request $request)

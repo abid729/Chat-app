@@ -42,7 +42,6 @@
                      @endif
                      @endif
 
-                     
 
                      <div class="about">
                            @if ($chathead->group_name)
@@ -88,9 +87,10 @@
                                  , {{ $day = $dateTime->format('l') }}</span>
                                  <img src="{{url('/images/my-pic.jpg')}}" alt="avatar">
                               </div>
+                            
 
                               <div class="message other-message float-right">{{ $chat->message }} </div>
-                              @php $status = "sent";
+                              @php $status = $chat->messageStatus['status'];
                                if($status == "read") {@endphp
                                  <span class="icon read float-right"><i class="fas fa-check-double"></i></span>
                               @php } else if($status == "delivered") { @endphp
