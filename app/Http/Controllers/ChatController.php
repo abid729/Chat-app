@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Models\MessageStatus;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
@@ -22,17 +23,17 @@ class ChatController extends Controller
                 ->whereIn('g.id', function($subquery) {
                       $subquery->select('gu.group_id')
                                ->from('group_user as gu')
-                               ->where('gu.user_id', '=', 1);
+                               ->where('gu.user_id', '=', Auth::user()->id);
                 });
       })
       ->orderBy('c.updated_at', 'DESC')
       ->select('c.id as conversation_id', 'u.name as chat_head_name', 'g.name as group_name','u.image as chat_head_image', 'g.image as group_image')
       ->get();
 
-    // dd($chathead);
+    // dd(Auth::user()->id);
     $chats =  Message::with('messageStatus')
     ->latest()
-    ->limit(2)
+    ->limit(5)
     ->get()
     ->reverse();
     
@@ -46,13 +47,13 @@ class ChatController extends Controller
         $message = new Message;
         $message_statuses = new MessageStatus; 
         $message->conversation_id  = 1;
-        $message->sender_id  = 1;
+        $message->sender_id  = Auth::user()->id;
         $message->type = $message->getMessageType($request->message);
         $message->message = $request->message;
         $message->save();
         $last_id = $message->id;
         $message_statuses->message_id = $last_id;
-        $message_statuses->user_id = 1;
+        $message_statuses->user_id = Auth::user()->id;
 
         if($connected){
           fclose($connected);
@@ -81,7 +82,7 @@ class ChatController extends Controller
       $message = Message::findOrFail($id);
 
       $message->statuses()
-          ->where('user_id', 1)
+          ->where('user_id' != Auth::user()->id)
           ->update(['status' => 'read']);
 
       return response()->json(['success' => true]);

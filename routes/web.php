@@ -36,3 +36,7 @@ Route::post('/check-internet-connection', [App\Http\Controllers\ChatController::
 Route::put('/messages/{id}/read', [App\Http\Controllers\ChatController::class, 'markAsRead'])->name('markAsRead');
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

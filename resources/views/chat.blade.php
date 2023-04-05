@@ -11,7 +11,7 @@
    
       </style>
    </head>
-   <body>
+   <body >
    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
    <!-- <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"> -->
    <link rel="stylesheet" type="text/css" href="css/app.css">
@@ -60,7 +60,7 @@
                     
                      </ul>
                   </div>
-                  <div class="chat">
+                  <div class="chat" >
                      <div class="chat-header clearfix">
                         <div class="row">
                            <div class="col-lg-6">
@@ -84,26 +84,44 @@
                            $dateTime = new DateTime($chat->created_at);
                            @endphp
                            <li class="clearfix">
-                              <div class="message-data text-right">
-                                 <span class="message-data-time text-right">{{ $dateTime->format('h:i A') }}
-                                 , {{ $day = $dateTime->format('l') }}</span>
-                                 <img src="{{url('/images/my-pic.jpg')}}" alt="avatar">
+                            @php 
+                               if($chat->sender_id != Auth::user()->id){  @endphp
+                                 <div class="receiver">
+                                    <div class="message-text">
+                                    {{ $chat->message }}
+                                    </div>
+                                    <span class="message-time pull-right">
+                                    {{ $dateTime->format('h:i A') }}
+                                    , {{ $day = $dateTime->format('l') }}
+                                    </span>
+                                 </div>
+                                 @php 
+                               }
+                              else{ @endphp
+                              <div class="sender">
+                                 <div class="message-text msg_id" data-id="{{ $chat->id }}">
+                                 {{ $chat->message }}
+                                 </div>
+                                 <span class="message-time pull-right">
+                                 {{ $dateTime->format('h:i A') }}
+                                 , {{ $day = $dateTime->format('l') }} 
+                                 @php $status = $chat->messageStatus['status'];
+            if($status == "read") {@endphp
+            <i class="fas fa-check-double"></i>
+         @php } else if($status == "delivered") { @endphp
+            <i class="fas fa-check-double"></i>
+         @php } else { @endphp
+            <i class="fas fa-check"></i>
+            @php }  @endphp
+                                 </span>
                               </div>
-                            
-
-                              <div class="message msg_id other-message float-right" data-id="{{ $chat->id }}">{{ $chat->message }} </div>
-                              @php $status = $chat->messageStatus['status'];
-                               if($status == "read") {@endphp
-                                 <span class="icon read float-right"><i class="fas fa-check-double"></i></span>
-                              @php } else if($status == "delivered") { @endphp
-                                 <span class="icon delivered float-right"><i class="fas fa-check-double"></i></span>
-                              @php } else { @endphp
-                                 <span class="icon sent float-right"><i class="fas fa-check"></i></span>
-                               @php }  @endphp
-                                 </li>
-                           @endforeach
+                            @php  }  
+                            @endphp
+                        @endforeach
+                             
                         </ul>
                      </div>
+                    
                      <div class="chat-message clearfix">
                         <div class="input-group mb-0">
                            <div class="input-group-prepend"></div>
@@ -180,7 +198,17 @@
                });
             });
          });
+         $(".heading-compose").click(function() {
+      $(".side-two").css({
+        "left": "0"
+      });
+    });
 
+    $(".newMessage-back").click(function() {
+      $(".side-two").css({
+        "left": "-100%"
+      });
+    });
       </script>
    </body>
 </html>
