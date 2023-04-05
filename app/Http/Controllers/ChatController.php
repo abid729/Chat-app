@@ -66,7 +66,7 @@ class ChatController extends Controller
         return redirect()->route('chat.index')->with('success','Chat has been created successfully.');
       }
 
-      public function checkInternetConnection(Request $request)
+   public function checkInternetConnection(Request $request)
     {
         $connected = @fsockopen("www.google.com", 80);
         if ($connected) {
@@ -75,5 +75,15 @@ class ChatController extends Controller
         } else {
             return response()->json(['status' => 'undelivered']);
         }
+    }
+    public function markAsRead($id)
+    {
+      $message = Message::findOrFail($id);
+
+      $message->statuses()
+          ->where('user_id', 1)
+          ->update(['status' => 'read']);
+
+      return response()->json(['success' => true]);
     }
 }

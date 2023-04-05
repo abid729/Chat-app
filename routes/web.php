@@ -33,4 +33,6 @@ Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name
 // Route::get('/chat/create', [App\Http\Controllers\ChatController::class, 'create'])->name('chat.create');
 Route::post('/chat/store', [App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
 Route::post('/check-internet-connection', [App\Http\Controllers\ChatController::class, 'checkInternetConnection'])->name('check.internet.connection');
+Route::put('/messages/{id}/read', [App\Http\Controllers\ChatController::class, 'markAsRead'])->name('markAsRead');
+
 

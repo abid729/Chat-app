@@ -15,7 +15,10 @@ class Message extends Model
     {
         return $this->hasOne(MessageStatus::class);
     }
-
+    public function statuses()
+    {
+        return $this->hasMany(MessageStatus::class);
+    }
     public function getMessageType($message) {
         // Check if the message is an emoji
         if (preg_match('/[\x{1F600}-\x{1F64F}]/u', $message)) {

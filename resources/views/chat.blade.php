@@ -4,6 +4,8 @@
       <meta charset="utf-8">
       <title>Chat APP</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="csrf-token" content="{{ csrf_token() }}" />
+
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
       <style type="text/css">
    
@@ -89,7 +91,7 @@
                               </div>
                             
 
-                              <div class="message other-message float-right">{{ $chat->message }} </div>
+                              <div class="message msg_id other-message float-right" data-id="{{ $chat->id }}">{{ $chat->message }} </div>
                               @php $status = $chat->messageStatus['status'];
                                if($status == "read") {@endphp
                                  <span class="icon read float-right"><i class="fas fa-check-double"></i></span>
@@ -154,6 +156,31 @@ $(document).on('keyup', '.message-input', function() {
     // Hide the "typing" message since the user has stopped typing
     $('.typing-status').text('');
   }, typingInterval);
+});
+// Your JavaScript code
+const messages = document.querySelectorAll('.msg_id');
+
+messages.forEach(message => {
+    message.addEventListener('click', () => {
+        const messageId = message.getAttribute('data-id');
+        
+        // Send an AJAX request to mark the message as read
+        fetch(`/messages/${messageId}/read`, {
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+               console.log();
+                // Update the UI to indicate that the message has been read
+               //  message.classList.add('fas fa-check-double');
+            }
+        }).catch(error => {
+            console.error(error);
+        });
+    });
 });
 
       </script>
