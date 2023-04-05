@@ -131,57 +131,55 @@
             console.log('delivered');
         }
         var typingTimer = null;
-var typingInterval = 1000; // in milliseconds
+         var typingInterval = 1000; // in milliseconds
 
-$(document).on('keydown', '.message-input', function() {
-  // Clear the previous typing timer, if any
-  clearTimeout(typingTimer);
+         $(document).on('keydown', '.message-input', function() {
+         // Clear the previous typing timer, if any
+         clearTimeout(typingTimer);
 
-  // Show the "typing" message to the user
-  $('.typing-status').text('typing...');
+         // Show the "typing" message to the user
+         $('.typing-status').text('typing...');
 
-  // Set a new typing timer to check if the user has stopped typing
-  typingTimer = setTimeout(function() {
-    // Hide the "typing" message since the user has stopped typing
-    $('.typing-status').text('');
-  }, typingInterval);
-});
+         // Set a new typing timer to check if the user has stopped typing
+         typingTimer = setTimeout(function() {
+            // Hide the "typing" message since the user has stopped typing
+            $('.typing-status').text('');
+         }, typingInterval);
+         });
 
-$(document).on('keyup', '.message-input', function() {
-  // Clear the previous typing timer, if any
-  clearTimeout(typingTimer);
+         $(document).on('keyup', '.message-input', function() {
+         // Clear the previous typing timer, if any
+         clearTimeout(typingTimer);
 
-  // Set a new typing timer to check if the user has stopped typing
-  typingTimer = setTimeout(function() {
-    // Hide the "typing" message since the user has stopped typing
-    $('.typing-status').text('');
-  }, typingInterval);
-});
-// Your JavaScript code
-const messages = document.querySelectorAll('.msg_id');
+         // Set a new typing timer to check if the user has stopped typing
+         typingTimer = setTimeout(function() {
+            // Hide the "typing" message since the user has stopped typing
+            $('.typing-status').text('');
+         }, typingInterval);
+         });
+         // Your JavaScript code
+         const messages = document.querySelectorAll('.msg_id');
 
-messages.forEach(message => {
-    message.addEventListener('click', () => {
-        const messageId = message.getAttribute('data-id');
-        
-        // Send an AJAX request to mark the message as read
-        fetch(`/messages/${messageId}/read`, {
-            method: 'PUT',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (response.ok) {
-               console.log();
-                // Update the UI to indicate that the message has been read
-               //  message.classList.add('fas fa-check-double');
-            }
-        }).catch(error => {
-            console.error(error);
-        });
-    });
-});
+         messages.forEach(message => {
+            message.addEventListener('click', () => {
+               const messageId = message.getAttribute('data-id');
+               
+               // Send an AJAX request to mark the message as read
+               fetch(`/messages/${messageId}/read`, {
+                     method: 'PUT',
+                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json'
+                     }
+               }).then(response => {
+                     if (response.ok) {
+                        console.log();
+                  }
+               }).catch(error => {
+                     console.error(error);
+               });
+            });
+         });
 
       </script>
    </body>
