@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Jenssegers\Agent\Agent;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 class ChatController extends Controller
 {
     public function index(){
+    //   $agent = new Agent();
+    //   $device = $agent->device();
+    //   $platform = $agent->platform();
+    //   $browser = $agent->browser();
+    // dd($browser);
       $chathead = DB::table('conversations as c')
       ->leftJoin('conversation_user as cu', 'c.id', '=', 'cu.conversation_id')
       ->leftJoin('users as u', 'u.id', '=', 'cu.user_id')
@@ -29,8 +35,7 @@ class ChatController extends Controller
       ->orderBy('c.updated_at', 'DESC')
       ->select('c.id as conversation_id', 'u.name as chat_head_name', 'g.name as group_name','u.image as chat_head_image', 'g.image as group_image')
       ->get();
-
-    // dd(Auth::user()->id);
+   
     $chats =  Message::with('messageStatus')
     ->latest()
     ->limit(5)
