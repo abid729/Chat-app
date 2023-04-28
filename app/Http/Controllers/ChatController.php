@@ -42,7 +42,7 @@ class ChatController extends Controller
     ->get()
     ->reverse();
     
-     return view('chat', compact('chats','chathead'));
+     return view('chat1', compact('chats','chathead'));
     }
 
     public function store(Request $request)
